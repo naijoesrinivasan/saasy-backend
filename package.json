@@ -1,0 +1,27 @@
+{
+  "name": "saasy-backend",
+  "version": "1.0.0",
+  "description": "Back-end repository to provision SaaSY",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kanishk98/saasy-backend.git"
+  },
+  "keywords": [
+    "saasy"
+  ],
+  "author": "Kanishk Kakar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kanishk98/saasy-backend/issues"
+  },
+  "homepage": "https://github.com/kanishk98/saasy-backend#readme",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "express": "^4.16.4",
+    "mongodb": "^3.2.2"
+  }
+}
