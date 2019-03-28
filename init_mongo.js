@@ -18,9 +18,12 @@ mongoClient.connect((err, mongoClient) => {
   } else {
     database = mongoClient.db(Constants.stagingDatabase);
   }
-  const collections = database.listCollections().toArray((err, columnInfo) => {
-    assert.equals(null, err);
-  });
+  let collections = [];
+  database
+    .listCollections()
+    .toArray()
+    .then(res => (collections = res))
+    .catch(err => console.err(err));
   const newCollections = Constants.collections;
   for (collection in newCollections) {
     if (collections.indexOf(collection) === -1) {
@@ -33,4 +36,6 @@ mongoClient.connect((err, mongoClient) => {
       });
     }
   }
+  console.log("MongoDB initialised");
+  process.exit(0);
 });
