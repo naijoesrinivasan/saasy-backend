@@ -35,7 +35,7 @@ class TreeController {
 		try {
 			await nodesCollection.deleteOne({ _id: new ObjectId(childId) });
 			let parentNode = await nodesCollection.findOne({
-				_id: parentId
+				_id: new ObjectId(parentId)
 			});
 			if (parentNode) {
 				let children = parentNode.children;
