@@ -6,13 +6,20 @@ const controller = new TreeController();
 
 router.post("/add-child", async (req, res) => {
 	const db = req.app.locals.db;
-	console.log(req.body);
-	const addChild = await controller.addChild(req.body.child, req.body.projectId, db);
-	res.send(addChild);
+	const addChild = await controller.addChild(req.body.child, req.body.parentId, db);
+	res.sendStatus(addChild);
 });
 
-router.post("/delete-child", (req, res) => {});
+router.post("/delete-child", async (req, res) => {
+	const db = req.app.locals.db;
+	const deleteChild = await controller.deleteChild(req.body.childId, req.body.parentId, db);
+	res.sendStatus(deleteChild);
+});
 
-router.post("/edit-child", (req, res) => {});
+router.post("/edit-child", async (req, res) => {
+	const db = req.app.locals.db;
+	const editChild = await controller.editChild(req.body.child, req.body.parentId, db);
+	res.sendStatus(editChild);
+});
 
 module.exports = router;
