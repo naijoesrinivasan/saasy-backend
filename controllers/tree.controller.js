@@ -2,25 +2,61 @@ const Constants = require("../constants");
 const ObjectId = require("mongodb").ObjectId;
 
 class TreeController {
-	async addChild(child, parentId, db) {
-		child.children = [];
+	async traverse(node, data, collection) {
+		if (node) {
+			data.name = node.key;
+			data.children = [];
+			const children = node.children;
+			for (const childId in children) {
+				const child = await collection.findOne({
+					_id: new ObjectId(children[childId])
+				});
+				data.children.push(await this.traverse(child, {}, collection));
+			}
+		}
+		return data;
+	}
+
+	async getTree(projectId, db) {
+		const data = {};
+		const treesCollection = db.collection(Constants.collections[1]);
+		const nodesCollection = db.collection(Constants.collections[2]);
+		let root = await treesCollection.findOne({ projectId: projectId });
+		root = await nodesCollection.findOne({ _id: new ObjectId(root._id) });
+		return await this.traverse(root, {}, nodesCollection);
+	}
+
+	async addChild(child, parentId, projectId, db) {
 		const nodesCollection = db.collection(Constants.collections[2]);
 		try {
+			child.children = [];
 			const childId = String(
 				(await nodesCollection.insertOne(child)).ops[0]._id
 			);
-			let parentNode = await nodesCollection.findOne({
-				_id: new ObjectId(parentId)
-			});
+			if (!parentId) {
+				// root node, projectId must have been provided
+				if (!projectId) {
+					return 403;
+				}
+				const treesCollection = db.collection(Constants.collections[1]);
+				child.projectId = projectId;
+				delete child.children;
+				await treesCollection.insertOne(child);
+			} else {
+				child.children = [];
+				let parentNode = await nodesCollection.findOne({
+					_id: new ObjectId(parentId)
+				});
 
-			if (parentNode && childId) {
-				let children = parentNode.children;
-				children.push(childId);
-				parentNode.children = children;
-				await nodesCollection.replaceOne(
-					{ _id: new ObjectId(parentId) },
-					parentNode
-				);
+				if (parentNode) {
+					let children = parentNode.children;
+					children.push(childId);
+					parentNode.children = children;
+					await nodesCollection.replaceOne(
+						{ _id: new ObjectId(parentId) },
+						parentNode
+					);
+				}
 			}
 		} catch (error) {
 			console.error(error);

@@ -6,7 +6,7 @@ const controller = new TreeController();
 
 router.post("/add-child", async (req, res) => {
 	const db = req.app.locals.db;
-	const addChild = await controller.addChild(req.body.child, req.body.parentId, db);
+	const addChild = await controller.addChild(req.body.child, req.body.parentId, req.body.projectId, db);
 	res.sendStatus(addChild);
 });
 
