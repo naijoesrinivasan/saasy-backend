@@ -104,6 +104,18 @@ class TreeController {
 		return 200;
 	}
 
+	async getChildByName(childName, db) {
+		const nodesCollection = db.collection(Constants.collections[2]);
+		let child = null;
+		try {
+			child = await nodesCollection.findOne({ key: String(childName) });
+		} catch (error) {
+			console.error(error);
+			return error;
+		}
+		return child;
+	}
+
 	async getTrees(userId) {
 		try {
 			const treesCollection = db.collections(Constants.collections[1]);
