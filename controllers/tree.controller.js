@@ -53,6 +53,18 @@ class TreeController {
 		return 200;
 	}
 
+	async editChild(child, db) {
+		const nodesCollection = db.collection(Constants.collections[2]);
+		child._id = new ObjectId(child._id);
+		try {
+			await nodesCollection.replaceOne({ _id: child._id }, child);
+		} catch (error) {
+			console.error(error);
+			return 500;
+		}
+		return 200;
+	}
+
 	async getTrees(userId) {
 		try {
 			const treesCollection = db.collections(Constants.collections[1]);

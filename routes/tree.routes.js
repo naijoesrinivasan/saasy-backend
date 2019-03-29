@@ -18,7 +18,7 @@ router.post("/delete-child", async (req, res) => {
 
 router.post("/edit-child", async (req, res) => {
 	const db = req.app.locals.db;
-	const editChild = await controller.editChild(req.body.child, req.body.parentId, db);
+	const editChild = await controller.editChild(req.body.child, db);
 	res.sendStatus(editChild);
 });
 
