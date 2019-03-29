@@ -1,26 +1,55 @@
 const Constants = require("../constants");
+const ObjectId = require("mongodb").ObjectId;
 
 class TreeController {
 	async addChild(child, parentId, db) {
 		child.children = [];
 		const nodesCollection = db.collection(Constants.collections[2]);
 		try {
-			await nodesCollection.insertOne(child);
+			const childId = String(
+				(await nodesCollection.insertOne(child)).ops[0]._id
+			);
 			let parentNode = await nodesCollection.findOne({
-				_id: parentId
+				_id: new ObjectId(parentId)
 			});
 
-			if (parentNode) {
+			if (parentNode && childId) {
 				let children = parentNode.children;
-				children.push(child);
+				children.push(childId);
 				parentNode.children = children;
-				await nodesCollection.replaceOne({ _id: parentId }, parentNode);
+				await nodesCollection.replaceOne(
+					{ _id: new ObjectId(parentId) },
+					parentNode
+				);
 			}
 		} catch (error) {
 			console.error(error);
 			return 500;
 		}
 
+		return 200;
+	}
+
+	async deleteChild(childId, parentId, db) {
+		const nodesCollection = db.collection(Constants.collections[2]);
+		try {
+			await nodesCollection.deleteOne({ _id: new ObjectId(childId) });
+			let parentNode = await nodesCollection.findOne({
+				_id: parentId
+			});
+			if (parentNode) {
+				let children = parentNode.children;
+				children.splice(children.indexOf(childId), 1);
+				parentNode.children = children;
+				await nodesCollection.replaceOne(
+					{ _id: new ObjectId(parentId) },
+					parentNode
+				);
+			}
+		} catch (error) {
+			console.error(error);
+			return 500;
+		}
 		return 200;
 	}
 
