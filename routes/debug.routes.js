@@ -16,4 +16,15 @@ router.post("/delete-collection", async (req, res) => {
 	res.sendStatus(200);
 });
 
+router.post("/show-docs", async (req, res) => {
+	try {
+		const db = req.app.locals.db;
+		const collection = db.collection(req.body.targetCollection);
+		res.send(await collection.find().toArray());
+	} catch (error) {
+		console.error(error);
+		res.sendStatus(500);
+	}
+});
+
 module.exports = router;
