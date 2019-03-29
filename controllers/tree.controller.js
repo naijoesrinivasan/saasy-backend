@@ -29,9 +29,10 @@ class TreeController {
 
 	async addChild(child, parentId, projectId, db) {
 		const nodesCollection = db.collection(Constants.collections[2]);
+		let childId = null;
 		try {
 			child.children = [];
-			const childId = String(
+			childId = String(
 				(await nodesCollection.insertOne(child)).ops[0]._id
 			);
 			if (!parentId) {
@@ -61,10 +62,11 @@ class TreeController {
 			}
 		} catch (error) {
 			console.error(error);
-			return 500;
+			return error;
 		}
 
-		return 200;
+		child._id = childId;
+		return child;
 	}
 
 	async deleteChild(childId, parentId, db) {
