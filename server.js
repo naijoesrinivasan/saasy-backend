@@ -3,7 +3,8 @@ const app = express();
 const MongoClient = require("mongodb").MongoClient;
 const MongoServer = require("mongodb").Server;
 const assert = require("assert");
-const routes = require("./routes/index.routes.js");
+const indexRoutes = require("./routes/index.routes.js");
+const treeRoutes = require("./routes/tree.routes.js");
 const Constants = require("./constants.js");
 
 const dbType = process.argv[2];
@@ -25,7 +26,8 @@ if (dbType === "p") {
 }
 
 app.use(express.json());
-app.use("", routes);
+app.use("", indexRoutes);
+app.use("/project", treeRoutes);
 
 app.listen(port, () => {
 	console.log("Server active at port 3000");
