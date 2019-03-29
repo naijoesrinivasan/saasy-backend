@@ -27,11 +27,11 @@ if (dbType === "p") {
 	app.locals.db = mongoClient.db(Constants.stagingDatabase);
 }
 
+app.use(cors());
 app.use(express.json());
 app.use("", indexRoutes);
 app.use("/project", treeRoutes);
 app.use("/debug", debugRoutes);
-app.use(cors());
 
 app.listen(port, () => {
 	console.log("Server active at port 3000");
