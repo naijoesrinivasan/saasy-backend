@@ -5,6 +5,7 @@ class TreeController {
 	async traverse(node, data, collection) {
 		if (node) {
 			data.name = node.key;
+			data._id = node._id;
 			data.children = [];
 			const children = node.children;
 			for (const childId in children) {
