@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const MongoClient = require("mongodb").MongoClient;
 const MongoServer = require("mongodb").Server;
 const assert = require("assert");
@@ -30,6 +31,7 @@ app.use(express.json());
 app.use("", indexRoutes);
 app.use("/project", treeRoutes);
 app.use("/debug", debugRoutes);
+app.use(cors());
 
 app.listen(port, () => {
 	console.log("Server active at port 3000");

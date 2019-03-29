@@ -21,6 +21,7 @@
   "homepage": "https://github.com/kanishk98/saasy-backend#readme",
   "dependencies": {
     "assert": "^1.4.1",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "mongodb": "^3.2.2"
   }
