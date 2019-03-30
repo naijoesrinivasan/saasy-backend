@@ -113,7 +113,7 @@ class TreeController {
 			console.error(error);
 			return error;
 		}
-		return child;
+		return await this.traverse(child, {}, nodesCollection);
 	}
 
 	async getTrees(userId) {
