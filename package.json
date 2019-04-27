@@ -4,7 +4,8 @@
   "description": "Back-end repository to provision SaaSY",
   "main": "index.js",
   "scripts": {
-    "test": "xo && test"
+    "test": "xo && test",
+    "travis": "cd ./scripts && ./travis-build-test.sh"
   },
   "repository": {
     "type": "git",
